@@ -5,16 +5,14 @@
 
 def canUnlockAll(boxes):
     """Checks if all boxes can be opened"""
-    unlocked_box = [0]
-    for box_num, i in enumerate(boxes):
-        if not i:
+    unlocked_boxes = [0]
+    for box_num in range(len(boxes)):
+        if not boxes[box_num]:
             continue
-        for keys in i:
-            if keys < len(boxes) and keys not in unlocked_box and keys != box_num:
-                 unlocked_box.append(keys)
-    if len(unlocked_box) == len(boxes):
-        return True
-    return False
+        for key in boxes[box_num]:
+            if key < len(boxes) and key not in unlocked_boxes and key != box_num:
+                unlocked_boxes.append(key)
+    return len(unlocked_boxes) == len(boxes)
 
 #Enumerate() method adds a counter to an iterable and returns it in a form of enumerating object.
 
