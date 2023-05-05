@@ -13,14 +13,3 @@ def canUnlockAll(boxes):
             if key < len(boxes) and key not in unlocked_boxes and key != box_num:
                 unlocked_boxes.append(key)
     return len(unlocked_boxes) == len(boxes)
-
-#Enumerate() method adds a counter to an iterable and returns it in a form of enumerating object.
-
-# boxes = [[1], [2], [3], [4], []]
-# print(canUnlockAll(boxes))
-
-# boxes = [[1, 4, 6], [2], [0, 4, 1], [5, 6, 2], [3], [4, 1], [6]]
-# print(canUnlockAll(boxes))
-
-# boxes = [[1, 4], [2], [0, 4, 1], [3], [], [4, 1], [5, 6]]
-# print(canUnlockAll(boxes))
