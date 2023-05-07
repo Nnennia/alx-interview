@@ -20,7 +20,6 @@ def minOperations(n: int) -> int:
             pasted += copied
             count += 2
         elif copied > 0:
-            # paste
             pasted += copied
             count += 1
     return count
