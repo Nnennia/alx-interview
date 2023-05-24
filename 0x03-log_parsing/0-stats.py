@@ -2,42 +2,35 @@
 """a script that reads stdin line by line and computes metrics"""
 
 import sys
-cache = {200: 0, 301: 0, 400: 0, 401: 0, 403: 0, 404: 0, 405: 0, 500: 0}
 
+cache = {'200': 0, '301': 0, '400': 0, '401': 0,
+         '403': 0, '404': 0, '405': 0, '500': 0}
+total_size = 0
+count = 0
 
-def log_parsing():
-    total_size = 0
-    counter = 0
-
-    def parse_line(line, cache):
+try:
+    for line in sys.stdin:
         line_list = line.split(" ")
         if len(line_list) > 4:
-            code = int(line_list[-2])
+            code = line_list[-2]
             size = int(line_list[-1])
-            if code in cache:
+            if code in cache.keys():
                 cache[code] += 1
-            return size
-        return 0
+            total_size += size
+            count += 1
 
-    try:
-        cache = {200: 0, 301: 0, 400: 0, 401: 0, 403: 0, 404: 0, 405: 0, 500: 0}
-        for line in sys.stdin:
-            total_size += parse_line(line, cache)
-            counter += 1
+        if count == 10:
+            count = 0
+            print('File size: {}'.format(total_size))
+            for key, value in sorted(cache.items()):
+                if value != 0:
+                    print('{}: {}'.format(key, value))
 
-            if counter == 10:
-                counter = 0
-                print('File size: {}'.format(total_size))
-                for key, value in sorted(cache.items()):
-                    if value != 0:
-                        print('{}: {}'.format(key, value))
-                cache = {200: 0, 301: 0, 400: 0, 401: 0, 403: 0, 404: 0, 405: 0, 500: 0}
+except Exception as err:
+    pass
 
-    except Exception as err:
-        pass
-
-    finally:
-        print('File size: {}'.format(total_size))
-        for key, value in sorted(cache.items()):
-            if value != 0:
-                print('{}: {}'.format(key, value))
+finally:
+    print('File size: {}'.format(total_size))
+    for key, value in sorted(cache.items()):
+        if value != 0:
+            print('{}: {}'.format(key, value))
