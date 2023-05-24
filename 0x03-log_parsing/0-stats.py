@@ -8,29 +8,37 @@ cache = {'200': 0, '301': 0, '400': 0, '401': 0,
 total_size = 0
 count = 0
 
+
+def print_status():
+    """Compute metrics"""
+    print("File size: {}".format(total_size))
+    for key, value in sorted(cache.items()):
+        if value > 0:
+            print("{}: {}".format(key, value))
+
+
 try:
     for line in sys.stdin:
-        line_list = line.split(" ")
-        if len(line_list) > 4:
-            code = line_list[-2]
-            size = int(line_list[-1])
+        try:
+            code = line.split()[-2]
             if code in cache.keys():
                 cache[code] += 1
-            total_size += size
-            count += 1
+        except BaseException:
+            pass
 
-        if count == 10:
-            count = 0
-            print('File size: {}'.format(total_size))
-            for key, value in sorted(cache.items()):
-                if value != 0:
-                    print('{}: {}'.format(key, value))
+        try:
+            size = line.split()[-1]
+            total_size += int(size)
+        except BaseException:
+            pass
 
-except Exception as err:
-    pass
+        # print metrics every 10 lines
+        count += 1
+        if (count % 10 == 0):
+            print_status()
 
-finally:
-    print('File size: {}'.format(total_size))
-    for key, value in sorted(cache.items()):
-        if value != 0:
-            print('{}: {}'.format(key, value))
+    print_status()
+
+except KeyboardInterrupt:
+    print_status()
+    raise
