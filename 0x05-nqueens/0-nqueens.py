@@ -11,6 +11,24 @@ def is_safe(placed_queens, row, col):
     return True
 
 
+def solve_nqueens(n):
+    solutions = []
+
+    def backtrack(row, placed_queens):
+        if row == n:
+            solutions.append(placed_queens[:])
+            return
+
+        for col in range(n):
+            if is_safe(placed_queens, row, col):
+                placed_queens.append((row, col))
+                backtrack(row + 1, placed_queens)
+                placed_queens.pop()
+
+    backtrack(0, [])
+    return solutions
+
+
 if __name__ == '__main__':
     if len(sys.argv) != 2:
         print("Usage: nqueens N")
@@ -26,20 +44,7 @@ if __name__ == '__main__':
         print('N must be at least 4')
         sys.exit(1)
 
-    solutions = []
-
-    def solve_nqueens(row, placed_queens):
-        if row == n:
-            solutions.append(placed_queens[:])
-            return
-
-        for col in range(n):
-            if is_safe(placed_queens, row, col):
-                placed_queens.append((row, col))
-                solve_nqueens(row + 1, placed_queens)
-                placed_queens.pop()
-
-    solve_nqueens(0, [])
+    solutions = solve_nqueens(n)
 
     for solution in solutions:
         print(solution)
