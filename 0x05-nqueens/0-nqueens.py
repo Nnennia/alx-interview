@@ -3,52 +3,60 @@
 import sys
 
 
-def is_safe(board, row, col, n):
-    for r in range(row):
-        if (
-            board[r][col] == 1
-            or (col - (row - r) >= 0 and board[r][col - (row - r)] == 1)
-            or (col + (row - r) < n and board[r][col + (row - r)] == 1)
-        ):
+def is_safe(board, row, col, N):
+    for i in range(col):
+        if board[row][i] == 1:
             return False
+
+    for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
+        if board[i][j] == 1:
+            return False
+
+    for i, j in zip(range(row, N, 1), range(col, -1, -1)):
+        if board[i][j] == 1:
+            return False
+
     return True
 
 
-def solve_nqueens_util(board, row, n, solutions):
-    if row == n:
-        solutions.append([list(row) for row in board])
-        return
+def solve_nqueens(N):
+    def solve(board, col):
+        if col >= N:
+            solutions.append(board.copy())
+            return
+        for row in range(N):
+            if is_safe(board, row, col, N):
+                board[row][col] = 1
+                solve(board, col + 1)
+                board[row][col] = 0
 
-    for col in range(n):
-        if is_safe(board, row, col, n):
-            board[row][col] = 1
-            solve_nqueens_util(board, row + 1, n, solutions)
-            board[row][col] = 0
-
-
-def solve_nqueens(n):
     solutions = []
-    board = [[0] * n for _ in range(n)]
-    solve_nqueens_util(board, 0, n, solutions)
+    initial_board = [[0] * N for _ in range(N)]
+    solve(initial_board, 0)
     return solutions
 
 
-if __name__ == "__main__":
+def main():
     if len(sys.argv) != 2:
         print("Usage: nqueens N")
         sys.exit(1)
 
     try:
-        n = int(sys.argv[1])
+        N = int(sys.argv[1])
     except ValueError:
         print("N must be a number")
         sys.exit(1)
 
-    if n < 4:
+    if N < 4:
         print("N must be at least 4")
-    else:
-        solutions = solve_nqueens(n)
-        for solution in solutions:
-            for row in solution:
-                print(" ".join("Q" if cell == 1 else "." for cell in row))
-            print()
+        sys.exit(1)
+
+    solutions = solve_nqueens(N)
+    for solution in solutions:
+        for row in solution:
+            print(' '.join(map(str, row)))
+        print()
+
+
+if __name__ == "__main__":
+    main()
