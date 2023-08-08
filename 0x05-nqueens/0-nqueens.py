@@ -2,7 +2,6 @@
 
 import sys
 
-
 def is_safe(board, row, col, N):
     for i in range(col):
         if board[row][i] == 1:
@@ -12,12 +11,11 @@ def is_safe(board, row, col, N):
         if board[i][j] == 1:
             return False
 
-    for i, j in zip(range(row, N, 1), range(col, -1, -1)):
+    for i, j in zip(range(row, N), range(col, -1, -1)):
         if board[i][j] == 1:
             return False
 
     return True
-
 
 def solve_nqueens(N):
     def solve(board, col):
@@ -35,7 +33,6 @@ def solve_nqueens(N):
     solve(initial_board, 0)
     return solutions
 
-
 def main():
     if len(sys.argv) != 2:
         print("Usage: nqueens N")
@@ -52,11 +49,25 @@ def main():
         sys.exit(1)
 
     solutions = solve_nqueens(N)
+    valid_solutions = []
+
     for solution in solutions:
+        valid = True
+        for i, new_queen in enumerate(solution):
+            for j, other_queen in enumerate(solution):
+                if i != j and not is_safe(solution, new_queen, other_queen, N):
+                    valid = False
+                    break
+            if not valid:
+                break
+
+        if valid and not any(set(solution) == set(valid_solution) for valid_solution in valid_solutions):
+            valid_solutions.append(solution)
+
+    for solution in valid_solutions:
         for row in solution:
             print(' '.join(map(str, row)))
         print()
-
 
 if __name__ == "__main__":
     main()
