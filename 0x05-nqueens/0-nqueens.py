@@ -64,7 +64,8 @@ def main():
             if not valid:
                 break
 
-        if valid and not any(set(solution) == set(valid_solution) for valid_solution in valid_solutions):
+        if valid and not any(set(solution) == set(valid_solution)
+                             for valid_solution in valid_solutions):
             valid_solutions.append(solution)
 
     for solution in valid_solutions:
