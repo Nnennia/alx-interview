@@ -2,6 +2,7 @@
 
 import sys
 
+
 def is_safe(board, row, col, N):
     for i in range(col):
         if board[row][i] == 1:
@@ -16,6 +17,7 @@ def is_safe(board, row, col, N):
             return False
 
     return True
+
 
 def solve_nqueens(N):
     def solve(board, col):
@@ -32,6 +34,7 @@ def solve_nqueens(N):
     initial_board = [[0] * N for _ in range(N)]
     solve(initial_board, 0)
     return solutions
+
 
 def main():
     if len(sys.argv) != 2:
@@ -68,6 +71,7 @@ def main():
         for row in solution:
             print(' '.join(map(str, row)))
         print()
+
 
 if __name__ == "__main__":
     main()
