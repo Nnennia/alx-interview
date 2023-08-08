@@ -74,7 +74,7 @@ if __name__ == '__main__':
             r -= 1
             while r >= 0:
                 c = placed_queens[r][1] + 1
-                del placed_queens[r]  # 
+                del placed_queens[r]
                 if c < n:
                     break
                 r -= 1
